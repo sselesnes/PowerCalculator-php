@@ -162,7 +162,7 @@ if (!$user_set) {
               </div>
               <div class="losses-box">
                 <div class="losses-label">Втрати інвертора</div>
-                <div class="losses-value">−8.0%</div>
+                <div class="losses-value" id="inv_losses_display">−8.0%</div>
               </div>
             </div>
           </div>
@@ -386,13 +386,23 @@ function updateCalculations() {
     // Отримуємо значення з полів
     const voltage = parseFloat(document.getElementById('bat_voltage').value);
     const capacity = parseFloat(document.getElementById('bat_capacity').value);
+    const efficiency = parseFloat(document.getElementById('inv_eff').value);
 
-    // Рахуємо: (V * Ah) / 1000 = kWh
-    if (!isNaN(voltage) && !isNaN(capacity)) {
-        const kwh = (voltage * capacity) / 1000;
+    // Рахуємо втрати 
+    if (!isNaN(efficiency)) {
+        const losses = 100 - efficiency;
+        // Виводимо з мінусом та знаком %
+        document.getElementById('inv_losses_display').innerText = '−' + losses.toFixed(1) + '%';
+    }
+
+    // Рахуємо реальну (ефективну) енергію з урахуванням ККД
+    // (V * Ah * Efficiency) / 100 / 1000
+    if (!isNaN(voltage) && !isNaN(capacity) && !isNaN(efficiency)) {
+        const totalKwh = (voltage * capacity) / 1000;
+        const effectiveKwh = totalKwh * (efficiency / 100);
 
         // Результат у форматі "0.00"
-        document.getElementById('total-capacity-display').innerText = kwh.toFixed(2) + ' кВт·год';
+        document.getElementById('total-capacity-display').innerText = effectiveKwh.toFixed(2) + ' кВт·год';
     }
 }
 
