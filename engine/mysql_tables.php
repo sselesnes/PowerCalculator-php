@@ -1,28 +1,27 @@
 <?php
-// 1. Визначаємо корінь, якщо файл викликано напряму через fetch/AJAX
+// Визначаємо корінь, якщо файл викликано напряму через fetch/AJAX
 if (!defined("ROOT_PATH")) {
     define("ROOT_PATH", realpath(__DIR__ . "/.."));
 }
 
-// 2. Обов'язково запускаємо сесію (для перевірки $u_id)
+// Обов'язково запускаємо сесію (для перевірки $u_id)
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 3. Підключаємо базу (використовуємо ROOT_PATH для надійності)
+// Підключаємо базу (використовуємо ROOT_PATH для надійності)
 require_once ROOT_PATH . "/engine/mysql.php";
 
-// 4. Перевірка авторизації
+// Перевірка авторизації
 if (!isset($_SESSION["user"]["id"])) {
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         die(json_encode(["success" => false, "error" => "Unauthorized"]));
     }
     return; // Якщо це звичайний include в content.php
 }
-
 $u_id = (int) $_SESSION["user"]["id"];
 
-// --- ЛОГІКА ЗАВАНТАЖЕННЯ ДАНИХ (для відображення на сторінці) ---
+// Завантаження даних для відображення на сторінці
 $res = $db->query("SELECT * FROM user_settings WHERE user_id = $u_id");
 $user_set = $res ? $res->fetch_assoc() : null;
 
@@ -46,7 +45,7 @@ if ($res_apps) {
     }
 }
 
-// --- ЛОГІКА ЗБЕРЕЖЕННЯ (для AJAX) ---
+// Збереження даних (для AJAX)
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["field"])) {
     $field = $db->real_escape_string($_POST["field"]);
     $value = $db->real_escape_string($_POST["value"]);
@@ -67,5 +66,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["field"])) {
     }
     exit();
 }
-?>
 
+// Додавання приладу
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["add_appliance"])) {
+    $name = $db->real_escape_string($_POST["name"]);
+    $rated = (int) $_POST["rated_power"];
+    $peak = (int) $_POST["peak_power"];
+    $hours = (float) $_POST["daily_hours"];
+
+    $sql = "INSERT INTO user_appliances (user_id, name, rated_power, peak_power, daily_hours) 
+            VALUES ($u_id, '$name', $rated, $peak, $hours)";
+
+    if ($db->query($sql)) {
+        echo json_encode(["success" => true, "new_id" => $db->insert_id]);
+    } else {
+        echo json_encode(["success" => false, "error" => $db->error]);
+    }
+    exit();
+}
+
+// Видалення приладу
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["delete_id"])) {
+    $del_id = (int) $_POST["delete_id"];
+
+    // Важливо: $u_id має бути визначений вище у файлі
+    $sql = "DELETE FROM user_appliances WHERE id = $del_id AND user_id = $u_id";
+
+    if ($db->query($sql)) {
+        echo json_encode(["success" => true]);
+    } else {
+        echo json_encode(["success" => false, "error" => $db->error]);
+    }
+    exit();
+}
+?>
