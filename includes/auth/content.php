@@ -236,7 +236,7 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
       <h2>Прилади</h2>
       <div class="line"></div>
       <button class="btn btn-ghost" onclick="location.reload()">↺ Оновити</button>
-      <button class="btn btn-primary">Роздрукувати звіт</button>    
+      <button class="btn btn-primary" onclick="printReport()">Друкувати звіт</button>    
     </div>
 
     <div class="appliance-list" id="appliance-list">
@@ -489,6 +489,94 @@ function deleteAppliance(appId) {
         }
     })
     .catch(err => console.error('Помилка:', err));
+}
+
+function printReport() {
+    // Отримуємо поточні значення результатів
+    const activeLoad = document.getElementById('res-active-load').innerText;
+    const peakLoad = document.getElementById('res-peak-load').innerText;
+    const autonomy = document.getElementById('res-autonomy').innerText;
+    const energy = document.getElementById('res-eff-kwh').innerText;
+    const capacity = document.getElementById('res-eff-ah').innerText;
+    
+    // Отримуємо список приладів
+    let appliancesHtml = '';
+    document.querySelectorAll('.appliance-row').forEach(row => {
+        const name = row.querySelector('.appliance-name').innerText;
+        const meta = row.querySelector('.appliance-meta').innerText;
+        appliancesHtml += `
+            <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee;">
+                <span style="font-weight: bold;">${name}</span>
+                <span style="color: #666;">${meta}</span>
+            </div>`;
+    });
+
+    // Відкриваємо нове вікно
+    const printWindow = window.open('', '_blank', 'width=800,height=900');
+    
+    // Формуємо вміст звіту
+    const reportHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Звіт PowerCalculator</title>
+        <style>
+            body { font-family: 'JetBrains Mono', monospace; color: #0f172a; padding: 40px; line-height: 1.6; }
+            .header { border-bottom: 2px solid #f59e0b; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+            .h-title { font-size: 24px; font-weight: 900; }
+            .h-date { font-size: 12px; color: #64748b; }
+            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+            .card { border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; }
+            .card-label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+            .card-value { font-size: 20px; font-weight: 800; color: #f59e0b; }
+            .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; margin: 20px 0 10px; border-left: 4px solid #f59e0b; padding-left: 10px; }
+            @media print { .no-print { display: none; } }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <div class="h-title">PowerCalculator <span style="color:#f59e0b">Report</span></div>
+            <div class="h-date">${new Date().toLocaleString('uk-UA')}</div>
+        </div>
+
+        <div class="section-title">Енергосистема</div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">Ефективна енергія</div>
+                <div class="card-value">${energy}</div>
+                <div style="font-size: 11px; color: #64748b;">${capacity} при DoD 95%</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Прогнозна автономність</div>
+                <div class="card-value" style="color: #10b981;">${autonomy}</div>
+            </div>
+        </div>
+
+        <div class="section-title">Навантаження</div>
+        <div class="grid">
+            <div class="card">
+                <div class="card-label">Активне</div>
+                <div class="card-value">${activeLoad}</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Пікове</div>
+                <div class="card-value" style="color: #f97316;">${peakLoad}</div>
+            </div>
+        </div>
+
+        <div class="section-title">Перелік підключених приладів</div>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px;">
+            ${appliancesHtml || '<p style="color:#94a3b8">Прилади не додані</p>'}
+        </div>
+
+        <div style="margin-top: 50px; text-align: center; border-top: 1px solid #eee; padding-top: 20px;" class="no-print">
+            <button onclick="window.print()" style="padding: 10px 20px; background: #f59e0b; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Надіслати на друк</button>
+        </div>
+    </body>
+    </html>`;
+
+    printWindow.document.write(reportHtml);
+    printWindow.document.close();
 }
 
 document.addEventListener('DOMContentLoaded', calculateResults);

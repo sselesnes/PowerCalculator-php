@@ -725,3 +725,40 @@ footer {
     font-size: 16px;
   }
 }
+
+@media print {
+  /* Приховуємо все зайве */
+  header,
+  footer,
+  .add-form,
+  .btn,
+  .appliance-remove,
+  .presets-grid,
+  .btn-ghost {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .panel {
+    border: 1px solid #eee;
+    box-shadow: none;
+    background: white;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+  }
+
+  .main-grid {
+    display: block;
+  }
+
+  .container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+}
