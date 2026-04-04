@@ -41,21 +41,21 @@
 ### 🔌 Конструктор навантаження
 
 - Динамічне додавання/видалення споживачів.
-- **База пресетів:** Швидкий вибір типових пристроїв (Холодильник, Роутер, Ноутбук).
+- **База пресетів:** Швидкий вибір типових пристроїв (Холодильник, Роутер, Ноутбук і т.д.).
 - **Пускові струми:** Врахування коефіцієнтів пуску (напр. х5 для холодильників) для аналізу пікового навантаження.
 
 ### 📄 Звітність та збереження
 
-- **LocalStorage:** Автоматичне збереження всієї конфігурації в браузері.
+- **MySQL:** Автоматичне збереження всієї конфігурації для користувачів.
 - **Smart Print:** Генерація чистого друкованого звіту без елементів інтерфейсу через окреме вікно.
 
 ---
 
 ## 🚀 Технологічний стек
 
-- **Frontend:** React 18, TypeScript.
-- **Стилізація:** Tailwind CSS (JIT mode).
-- **Збірка:** Vite.
+- **Frontend:** PHP, JS
+- **Стилізація:** CSS
+- **База даних:** MySQL
 - **Шрифти:** JetBrains Mono (для інженерного вигляду).
 
 ---
@@ -76,3 +76,36 @@ $$T = \frac{E_{nom} \cdot V \cdot DoD \cdot K_t \cdot \eta}{P_{total}}$$
 - $P_{total}$ — сумарна потужність активних споживачів (W).
 
 ---
+
+## 🗃️ Налаштування БД
+
+-- Таблиця користувачів
+CREATE TABLE `users` (
+`id` smallint(8) UNSIGNED NOT NULL,
+`email` varchar(100) NOT NULL,
+`password` varchar(255) NOT NULL,
+`name` varchar(50) NOT NULL,
+`date_reg` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Таблиця налаштувань калькулятора
+CREATE TABLE `user_settings` (
+`user_id` int(11) NOT NULL,
+`bat_type` varchar(20) DEFAULT 'LiFePO4',
+`bat_voltage` int(11) DEFAULT 12,
+`bat_capacity` int(11) DEFAULT 105,
+`bat_temp` int(11) DEFAULT 25,
+`inv_power` int(11) DEFAULT 2000,
+`inv_eff` float DEFAULT 92,
+`inv_peak` int(11) DEFAULT 4000,
+PRIMARY KEY (`user_id`),
+CONSTRAINT `fk_user_settings` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Таблиця списку приладів
+CREATE TABLE `user_appliances` (
+`user_id` int(11) NOT NULL,
+`appliance_json` text NOT NULL, -- Тут будемо зберігати весь список у JSON
+PRIMARY KEY (`user_id`),
+CONSTRAINT `fk_user_apps` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
