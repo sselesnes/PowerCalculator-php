@@ -1,0 +1,4 @@
+<Files ~ "\.(env|json|log|lock|phar|submit.php)$">
+  Order allow,deny
+  Deny from all
+</Files>
