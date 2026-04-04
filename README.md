@@ -98,14 +98,17 @@ CREATE TABLE `user_settings` (
 `inv_power` int(11) DEFAULT 2000,
 `inv_eff` float DEFAULT 92,
 `inv_peak` int(11) DEFAULT 4000,
-PRIMARY KEY (`user_id`),
-CONSTRAINT `fk_user_settings` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Таблиця списку приладів
-CREATE TABLE `user_appliances` (
-`user_id` int(11) NOT NULL,
-`appliance_json` text NOT NULL, -- Тут будемо зберігати весь список у JSON
-PRIMARY KEY (`user_id`),
-CONSTRAINT `fk_user_apps` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+
+CREATE TABLE IF NOT EXISTS `user_appliances` (
+`id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+`user_id` INT(11) NOT NULL,
+`name` VARCHAR(100) NOT NULL,
+`rated_power` INT(11) DEFAULT 0,
+`peak_power` INT(11) DEFAULT 0,
+`daily_hours` FLOAT DEFAULT 0,
+INDEX (`user_id`) -- пристрої певного користувача
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

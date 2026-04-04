@@ -82,6 +82,7 @@ header {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: center;
 }
 .welcome .header-subtitle {
   font-size: 25px;

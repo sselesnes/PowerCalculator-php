@@ -1,10 +1,8 @@
 <?php
-if ($_GET == null) {
-    require_once "index.php";
-}
+$page = isset($_GET["page"]) ? $_GET["page"] : "";
 
-switch ($_GET["page"]) {
-    case "":
+switch ($page) {
+    case "":	
         require_once "pages/welcome.php";
         break;
     case "login":
@@ -15,6 +13,7 @@ switch ($_GET["page"]) {
         break;
     case "logout":
         session_destroy();
+		header("Location: /");
         break;
     default:
         http_response_code(404);

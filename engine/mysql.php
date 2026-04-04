@@ -1,6 +1,19 @@
 <?php
-require_once __DIR__ . "/password.php";
-require_once __DIR__ . "/env.php";
+require_once "password.php"; // немає хешування паролів у PHP5.40
+require_once "env.php"; // підтримка .env
+
+// Підключаємося до сервера без вибору бази даних
+$db_server = new mysqli($_ENV["DB_HOST"], $_ENV["DB_USER"], $_ENV["DB_PASS"]);
+
+if ($db_server->connect_error) {
+    die("Помилка підключення до сервера: " . $db_server->connect_error);
+}
+
+// Створюємо базу даних, якщо її не існує
+$db_server->query(
+    "CREATE DATABASE IF NOT EXISTS `{$_ENV["DB_NAME"]}` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci"
+);
+$db_server->close();
 
 $db = new mysqli(
     $_ENV["DB_HOST"],
@@ -13,8 +26,42 @@ if ($db->connect_error) {
     die("Database error:" . $db->connect_error);
 }
 
-// Функція для очищення даних (Anti-SQL Injection)
-// trim() прибирає випадкові пробіли, real_escape_string() - небезпечні символи
+// Таблиця користувачів
+$db->query("CREATE TABLE IF NOT EXISTS `users` (
+    `id` smallint(8) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `email` varchar(100) NOT NULL,
+    `password` varchar(255) NOT NULL,
+    `name` varchar(50) NOT NULL,
+    `date_reg` date NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+// Таблиця налаштувань
+$db->query("CREATE TABLE IF NOT EXISTS `user_settings` (
+    `user_id` int(11) NOT NULL,
+    `bat_type` varchar(20) DEFAULT 'LiFePO4',
+    `bat_voltage` int(11) DEFAULT 12,
+    `bat_capacity` int(11) DEFAULT 105,
+    `bat_temp` int(11) DEFAULT 25,
+    `inv_power` int(11) DEFAULT 2000,
+    `inv_eff` float DEFAULT 92,
+    `inv_peak` int(11) DEFAULT 4000,
+    PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+// Таблиця приладів
+$db->query("CREATE TABLE IF NOT EXISTS `user_appliances` (
+  `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  `user_id` INT(11) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,
+  `rated_power` INT(11) DEFAULT 0,
+  `peak_power` INT(11) DEFAULT 0,
+  `daily_hours` FLOAT DEFAULT 0,
+  INDEX (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+// Очищення даних (Anti-SQL Injection): trim() прибирає випадкові пробіли, real_escape_string() - небезпечні символи
 $email = isset($_POST["email"])
     ? $db->real_escape_string(trim($_POST["email"]))
     : "";

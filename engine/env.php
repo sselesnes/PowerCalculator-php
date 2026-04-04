@@ -27,4 +27,5 @@ function loadEnv($path)
     return true;
 }
 
-loadEnv(__DIR__ . "/../.env");
+loadEnv(ROOT_PATH . "/.env");
+?>

@@ -1,14 +1,5 @@
 <?php
-$u_id = $_SESSION["user"]["id"];
-// Використовуємо *, щоб отримати всі налаштування
-$res = $db->query("SELECT * FROM user_settings WHERE user_id = $u_id");
-$user_set = $res->fetch_assoc();
-
-// Якщо запису в базі ще немає, створюємо порожній масив, щоб не було помилок
-if (!$user_set) {
-    $user_set = [];
-}
-?>
+require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
 
 <div class="main-grid">
         <!-- ліва колонка -->
@@ -364,7 +355,7 @@ function saveToDb(fieldName, fieldValue) {
     formData.append('field', fieldName);
     formData.append('value', fieldValue);
 
-    fetch('engine/save_settings.php', {
+    fetch('engine/mysql_tables.php', {
         method: 'POST',
         body: formData
     })
