@@ -1,4 +1,16 @@
-      <div class="main-grid">
+<?php
+$u_id = $_SESSION["user"]["id"];
+// Використовуємо *, щоб отримати всі налаштування
+$res = $db->query("SELECT * FROM user_settings WHERE user_id = $u_id");
+$user_set = $res->fetch_assoc();
+
+// Якщо запису в базі ще немає, створюємо порожній масив, щоб не було помилок
+if (!$user_set) {
+    $user_set = [];
+}
+?>
+
+<div class="main-grid">
         <!-- ліва колонка -->
         <div class="col">
           <!-- Акумулятор -->
@@ -9,47 +21,73 @@
             </div>
             <div class="form-grid">
               <div class="field">
-                <label for="bat-type">Тип</label>
-                <select class="select" id="bat-type" name="bat-type">
-                  <option value="LiFePO4">LiFePO4</option>
-                  <option value="AGM">AGM</option>
+                <label for="bat_type">Тип</label>
+                <select class="select" id="bat_type" name="bat_type">
+
+                 <option value="LiFePO4" <?php echo isset(
+                     $user_set["bat_type"]
+                 ) && $user_set["bat_type"] == "LiFePO4"
+                     ? "selected"
+                     : ""; ?>>LiFePO4</option>
+                <option value="AGM" <?php echo isset($user_set["bat_type"]) &&
+                $user_set["bat_type"] == "AGM"
+                    ? "selected"
+                    : ""; ?>>AGM</option>
+    
                 </select>
               </div>
               <div class="field">
-                <label for="bat-voltage">Напруга</label>
-                <select class="select" id="bat-voltage" name="bat-voltage">
-                  <option value="12" selected>12 V</option>
-                  <option value="24">24 V</option>
-                  <option value="48">48 V</option>
-                </select>
+                <label for="bat_voltage">Напруга</label>
+                <select class="select" id="bat_voltage" name="bat_voltage">
+
+                  <option value="12" <?php echo isset(
+                      $user_set["bat_voltage"]
+                  ) && $user_set["bat_voltage"] == "12"
+                      ? "selected"
+                      : ""; ?>>12 V</option>
+                  <option value="24" <?php echo isset(
+                      $user_set["bat_voltage"]
+                  ) && $user_set["bat_voltage"] == "24"
+                      ? "selected"
+                      : ""; ?>>24 V</option>
+                  <option value="48" <?php echo isset(
+                      $user_set["bat_voltage"]
+                  ) && $user_set["bat_voltage"] == "48"
+                      ? "selected"
+                      : ""; ?>>48 V</option>
+                  </select>
               </div>
               <div class="field">
-                <label for="bat-capacity">Ємність</label>
+                <label for="bat_capacity">Ємність</label>
                 <div class="input-wrap">
                   <input
                     class="input"
                     type="number"
-                    id="bat-capacity"
-                    name="bat-capacity"
-                    value="105"
+                    id="bat_capacity"
+                    name="bat_capacity"                    
                     min="10"
                     max="2000"
-                    step="10"
+                    step="5"
+                    value="<?php echo isset($user_set["bat_capacity"])
+                        ? $user_set["bat_capacity"]
+                        : "105"; ?>"
                   />
                   <span class="input-unit">Ah</span>
                 </div>
               </div>
               <div class="field">
-                <label for="bat-temperature">Температура</label>
+                <label for="bat_temp">Температура</label>
                 <div class="input-wrap">
                   <input
                     class="input"
                     type="number"
-                    id="bat-temperature"
-                    name="bat-temperature"
-                    value="25"
+                    id="bat_temp"
+                    name="bat_temp"                    
                     min="-30"
                     max="60"
+                    value="<?php echo isset($user_set["bat_temp"])
+                        ? $user_set["bat_temp"]
+                        : "25"; ?>"
                   />
                   <span class="input-unit colored-temp">°C</span>
                 </div>
@@ -57,7 +95,7 @@
             </div>
             <div class="summary-row" style="margin-top: 14px">
               <span class="label">Загальна ємність</span>
-              <span class="value">2.40 кВт·год</span>
+              <span class="value" id="total-capacity-display">2.40 кВт·год</span>
             </div>
           </div>
 
@@ -69,49 +107,55 @@
             </div>
             <div class="form-grid">
               <div class="field">
-                <label for="inv-power">Номінальна потужність</label>
+                <label for="inv_power">Номінальна потужність</label>
                 <div class="input-wrap">
                   <input
                     class="input"
                     type="number"
-                    id="inv-power"
-                    name="inv-power"
-                    value="2000"
+                    id="inv_power"
+                    name="inv_power"                    
                     min="100"
                     max="20000"
                     step="100"
+                    value="<?php echo isset($user_set["inv_power"])
+                        ? $user_set["inv_power"]
+                        : "2000"; ?>"
                   />
                   <span class="input-unit">W</span>
                 </div>
               </div>
               <div class="field">
-                <label for="inv-efficiency">ККД</label>
+                <label for="inv_eff">ККД</label>
                 <div class="input-wrap">
                   <input
                     class="input"
                     type="number"
-                    id="inv-efficiency"
-                    name="inv-efficiency"
-                    value="92"
+                    id="inv_eff"
+                    name="inv_eff"                    
                     min="50"
                     max="100"
                     step="0.5"
+                    value="<?php echo isset($user_set["inv_eff"])
+                        ? $user_set["inv_eff"]
+                        : "92"; ?>"
                   />
                   <span class="input-unit">%</span>
                 </div>
               </div>
               <div class="field">
-                <label for="inv-peak-load">Пікове навантаження</label>
+                <label for="inv_peak">Пікове навантаження</label>
                 <div class="input-wrap">
                   <input
                     class="input"
                     type="number"
-                    id="inv-peak-load"
-                    name="inv-peak-load"
-                    value="4000"
+                    id="inv_peak"
+                    name="inv_peak"                    
                     min="100"
                     max="50000"
                     step="100"
+                    value="<?php echo isset($user_set["inv_peak"])
+                        ? $user_set["inv_peak"]
+                        : "4000"; ?>"
                   />
                   <span class="input-unit">W</span>
                 </div>
@@ -313,3 +357,44 @@
         </div>
       </div>
 	  
+<script>
+// Збереження в БД
+function saveToDb(fieldName, fieldValue) {
+    const formData = new URLSearchParams();
+    formData.append('field', fieldName);
+    formData.append('value', fieldValue);
+
+    fetch('engine/save_settings.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) console.error('Помилка збереження:', data.error);
+    });
+}
+
+// EventListener 'change' на всі інпути та селекти в панелях налаштувань
+document.querySelectorAll('.panel .select, .panel .input').forEach(element => {
+    element.addEventListener('change', function() {        
+        saveToDb(this.name, this.value);        
+        updateCalculations(); 
+    });
+});
+
+function updateCalculations() {
+    // Отримуємо значення з полів
+    const voltage = parseFloat(document.getElementById('bat_voltage').value);
+    const capacity = parseFloat(document.getElementById('bat_capacity').value);
+
+    // Рахуємо: (V * Ah) / 1000 = kWh
+    if (!isNaN(voltage) && !isNaN(capacity)) {
+        const kwh = (voltage * capacity) / 1000;
+
+        // Результат у форматі "0.00"
+        document.getElementById('total-capacity-display').innerText = kwh.toFixed(2) + ' кВт·год';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', updateCalculations);
+</script>
