@@ -110,15 +110,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
     $sql = "INSERT INTO `users`(`id`, `email`, `password`, `name`, `date_reg`)
             VALUES (NULL, '$email1', '$hashed_password', '$name1', NOW())";
 
+    // Якщо успіх - одразу входимо
     try {
         $result = $db->query($sql);
-
         if ($result) {
-            $message = '<div class="auth-msg"><p>Реєстрація успішна! Перехід...</p></div>
-                        <script>setTimeout(function(){ window.location.href = "index.php"; }, 3000);</script>';
+            $message =
+                '
+    <div class="auth-msg">
+        <p>Вітаємо, ' .
+                htmlspecialchars($name1) .
+                '!</p>
+        <p>Акаунт створено. Вхід через 3 секунди...</p>
+        <div class="loader"></div> 
+    </div>
+    <script>
+        setTimeout(function() {             
+            window.location.href = "index.php?reg_success=' .
+                $db->insert_id .
+                "&name=" .
+                urlencode($name1) .
+                '"; 
+        }, 3000);
+    </script>';
         }
     } catch (Exception $e) {
-        // Якщо сталася помилка (наприклад, Duplicate entry)
+        // помилка PHP>5.4
         if ($db->errno == 1062) {
             $message =
                 '<div class="auth-err"><p>Цей E-mail вже зареєстрований!</p></div>';

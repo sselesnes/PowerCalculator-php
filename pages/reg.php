@@ -8,7 +8,7 @@ if (!isset($message)) {
 <div id="middle">
     <p class="title">Реєстрація нового користувача</p>
     
-    <?php if (strpos($message, "успішна") === false): ?>
+    <?php if (strpos($message, "створено") === false): ?>
     <form method="post">
         <div class="row"><label for="name1">Ім'я:</label> <input id="name1" type="text" name="name1" required value="<?php echo isset(
             $_POST["name1"]

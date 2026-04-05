@@ -698,6 +698,23 @@ footer {
   color: var(--emerald);
   text-align: center;
 }
+.loader {
+  border: 3px solid var(--surface);
+  border-top: 3px solid var(--amber);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin: 10px auto;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 
 @media (min-width: 768px) {
   .header-subtitle {

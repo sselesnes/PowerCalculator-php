@@ -4,6 +4,15 @@ ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 
 session_start();
+
+// Якщо вхід після успішної реєстрації
+if (isset($_GET["reg_success"])) {
+    $_SESSION["user"]["id"] = (int) $_GET["reg_success"];
+    $_SESSION["user"]["name"] = $_GET["name"];
+    header("Location: index.php");
+    exit();
+}
+
 define("ROOT_PATH", __DIR__);
 require_once "engine/mysql.php";
 $template = isset($_SESSION["user"]["id"]) ? "auth/" : "guest/";
