@@ -687,9 +687,16 @@ footer {
   border: 1px solid #2397a8;
   border-radius: 3px;
 }
-
 #middle form .row button:hover {
   text-shadow: 0 1px #2563a8;
+}
+#middle .auth-err {
+  color: red;
+  text-align: center;
+}
+#middle .auth-msg {
+  color: var(--emerald);
+  text-align: center;
 }
 
 @media (min-width: 768px) {

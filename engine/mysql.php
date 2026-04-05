@@ -92,10 +92,40 @@ if (isset($_POST["sign"])) {
             header("Location: /");
             exit();
         } else {
-            $_SESSION["error"] = "Неправильний пароль!";
+            $_SESSION["error"] = "Недійсний пароль!";
         }
     } else {
-        $_SESSION["error"] = "Користувача з таким Email не існує!";
+        $_SESSION["error"] = "Користувач з таким E-mail не зареєстрований!";
+    }
+}
+
+// Реєстрація нового користувача
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
+    $email1 = $db->real_escape_string($_POST["email1"]);
+    $name1 = $db->real_escape_string($_POST["name1"]);
+    $pass1 = $_POST["pass1"];
+
+    $hashed_password = password_hash($pass1, PASSWORD_DEFAULT);
+
+    // Виконуємо запит
+    $sql = "INSERT INTO `users`(`id`, `email`, `password`, `name`, `date_reg`)
+            VALUES (NULL, '$email1', '$hashed_password', '$name1', NOW())";
+
+    $result = $db->query($sql);
+
+    if ($result) {
+        $message = '<div class="auth-msg"><p>Реєстрація успішна!</p></div>
+                    <script>setTimeout(function(){ window.location.href = "index.php"; }, 3000);</script>';
+    } else {
+        if ($db->errno == 1062) {
+            $message =
+                '<div class="auth-err"><p>Цей E-mail вже зареєстрований!</p></div>';
+        } else {
+            $message =
+                '<div class="auth-err"><p>Помилка реєстрації: ' .
+                $db->error .
+                "</p></div>";
+        }
     }
 }
 ?>

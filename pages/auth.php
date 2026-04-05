@@ -1,11 +1,4 @@
 <div id="middle">
-  <?php if (isset($_SESSION["error"])): ?>
-    <div style="color: red;"><?php
-    echo $_SESSION["error"];
-    unset($_SESSION["error"]);
-    ?></div>
-  <?php endif; ?>
-
     <form method="post">
       <div class="row">
         <label>E-mail:</label>
@@ -19,4 +12,11 @@
         <button name="sign">Увійти</button>
       </div>
     </form>
+
+    <?php if (isset($_SESSION["error"])): ?>
+      <div class="auth-err"><?php
+      echo $_SESSION["error"];
+      unset($_SESSION["error"]);
+      ?></div>
+    <?php endif; ?>
 </div>
