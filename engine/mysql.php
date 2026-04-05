@@ -107,16 +107,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
 
     $hashed_password = password_hash($pass1, PASSWORD_DEFAULT);
 
-    // Виконуємо запит
     $sql = "INSERT INTO `users`(`id`, `email`, `password`, `name`, `date_reg`)
             VALUES (NULL, '$email1', '$hashed_password', '$name1', NOW())";
 
-    $result = $db->query($sql);
+    try {
+        $result = $db->query($sql);
 
-    if ($result) {
-        $message = '<div class="auth-msg"><p>Реєстрація успішна!</p></div>
-                    <script>setTimeout(function(){ window.location.href = "index.php"; }, 3000);</script>';
-    } else {
+        if ($result) {
+            $message = '<div class="auth-msg"><p>Реєстрація успішна! Перехід...</p></div>
+                        <script>setTimeout(function(){ window.location.href = "index.php"; }, 3000);</script>';
+        }
+    } catch (Exception $e) {
+        // Якщо сталася помилка (наприклад, Duplicate entry)
         if ($db->errno == 1062) {
             $message =
                 '<div class="auth-err"><p>Цей E-mail вже зареєстрований!</p></div>';
@@ -127,5 +129,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
                 "</p></div>";
         }
     }
-}
-?>
+} ?>
