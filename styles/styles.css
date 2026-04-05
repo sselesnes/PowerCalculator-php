@@ -60,7 +60,7 @@ header {
 }
 .welcome .logo {
   font-size: 40px;
-  margin-top: 30vh;
+  margin-top: 16vh;
   text-align: center;
 }
 .header-meta {
@@ -98,6 +98,7 @@ header {
   justify-content: flex-end;
   gap: 8px;
   flex-shrink: 0;
+  font-size: 14px;
 }
 
 .btn {
@@ -134,14 +135,6 @@ header {
 }
 .btn-primary:hover {
   background: var(--amber-l);
-}
-
-.btn-full {
-  width: 100%;
-  justify-content: center;
-  font-size: 13px;
-  padding: 12px;
-  border-radius: 10px;
 }
 
 .main-grid {
@@ -598,18 +591,10 @@ header {
 .preset-btn:hover {
   border-color: var(--amber);
 }
-.preset-icon {
-  font-size: 18px;
-}
 .preset-name {
   font-size: 12px;
   font-weight: 600;
   color: var(--text);
-  display: block;
-}
-.preset-meta {
-  font-size: 10px;
-  color: var(--text-dim);
   display: block;
 }
 
@@ -637,64 +622,51 @@ footer {
   color: #475569;
 }
 
-#middle {
+.middle {
   width: auto;
   max-width: 730px;
   margin: 0 auto;
   margin-top: 30vh;
 }
-#middle .title {
+.middle .title {
   font-size: large;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
-#middle form {
-  overflow: hidden;
+.middle form {
+  display: flex;
+  flex-direction: column;
 }
 
-#middle form .row {
+.middle form .row {
   padding: 6px 0;
   overflow: hidden;
 }
-
-#middle form .row label {
+.middle form .row label {
   display: block;
   width: 35%;
   float: left;
-  padding: 12px 0;
+  padding: 6px 0;
+  font-size: 12px;
 }
-
-#middle form .row input {
+.middle form .row input {
   display: block;
   width: 65%;
   float: left;
-  padding: 10px 30px;
+  padding: 6px 12px;
   background: #ffffff;
   border-radius: 3px;
   box-shadow: 0 3px 5px 0px #f1f1f1 inset;
   border: 1px solid #e2e2e2;
 }
-
-#middle form .row button {
-  display: block;
-  width: 35%;
+.middle form .row button {
   float: right;
-  height: 35px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #ffffff;
-  background: url("/images/btn.png");
-  border: 1px solid #2397a8;
-  border-radius: 3px;
 }
-#middle form .row button:hover {
-  text-shadow: 0 1px #2563a8;
-}
-#middle .auth-err {
+.middle .auth-err {
   color: red;
   text-align: center;
 }
-#middle .auth-msg {
+.middle .auth-msg {
   color: var(--emerald);
   text-align: center;
 }
@@ -707,6 +679,38 @@ footer {
   animation: spin 1s linear infinite;
   margin: 10px auto;
 }
+.welcome-description {
+  max-width: 500px;
+  margin: 30px auto;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-mid);
+  text-align: left;
+}
+
+.welcome-features {
+  list-style: none;
+  padding: 0;
+  margin: 40px 0;
+  font-size: 12px;
+}
+
+.welcome-features li {
+  margin-bottom: 12px;
+  padding-left: 5px;
+  border-left: 2px solid var(--amber);
+}
+
+.welcome-features strong {
+  color: var(--text);
+}
+
+.welcome-call {
+  text-align: center;
+  font-weight: 700;
+  color: var(--amber);
+  margin-top: 100px;
+}
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -717,9 +721,6 @@ footer {
 }
 
 @media (min-width: 768px) {
-  .header-subtitle {
-    display: block;
-  }
   .header-meta + span {
     display: block;
     margin-right: 1rem;
@@ -744,12 +745,22 @@ footer {
   .welcome .logo {
     font-size: 80px;
   }
+}
+
+@media (min-width: 1024px) {
   .header-actions .header-subtitle {
     display: block;
     font-size: 16px;
   }
-}
+  .welcome-features {
+    margin: 100px 0;
+    font-size: 20px;
+  }
 
+  .welcome-features li {
+    margin-bottom: 24px;
+  }
+}
 @media print {
   /* Приховуємо все зайве */
   header,

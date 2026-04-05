@@ -1,4 +1,5 @@
-<div id="middle">
+<div class="middle">
+   <p class="title">Особистий кабінет</p>
     <form method="post">
       <div class="row">
         <label>E-mail:</label>
@@ -9,7 +10,7 @@
         <input type="password" name="pass" value="" id="password" placeholder="Введіть Ваш пароль" />
       </div>
       <div class="row">
-        <button name="sign">Увійти</button>
+        <button class="btn btn-primary" name="sign">Увійти</button>
       </div>
     </form>
 

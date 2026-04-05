@@ -5,7 +5,7 @@ if (!isset($message)) {
 }
 ?>
 
-<div id="middle">
+<div class="middle">
     <p class="title">Реєстрація нового користувача</p>
     
     <?php if (strpos($message, "створено") === false): ?>
@@ -24,7 +24,7 @@ if (!isset($message)) {
                 : ""; ?>">
         </div>
         <div class="row"><label for="pass1">Пароль:</label> <input id="pass1" type="password" name="pass1" required></div>        
-        <div class="row"><button type="submit" name="login">Створити акаунт</button></div>
+        <div class="row"><button class="btn btn-primary" type="submit" name="login">Створити акаунт</button></div>
     </form>
     <?php endif; ?>
     
