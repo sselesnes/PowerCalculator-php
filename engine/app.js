@@ -278,3 +278,76 @@ function printReport() {
   printWindow.document.write(reportHtml);
   printWindow.document.close();
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Автозаповнення інпутів
+  const settings = window.userSettings || {};
+  for (let key in settings) {
+    // Шукаємо елемент за атрибутом name (який збігається з ключем у БД)
+    let element = document.getElementsByName(key)[0];
+    if (element) {
+      element.value = settings[key];
+    }
+  }
+
+  // Слухачі інпутів
+  document
+    .querySelectorAll(".panel .select, .panel .input")
+    .forEach((element) => {
+      element.addEventListener("change", function () {
+        if (this.name) {
+          saveToDb(this.name, this.value);
+          updateCalculations();
+          calculateResults();
+        }
+      });
+    });
+
+  // Показуємо сітку пресетів
+  const showPresetsBtn = document.getElementById("show-presets");
+  const presetsGrid = document.getElementById("presets-grid");
+
+  if (showPresetsBtn && presetsGrid) {
+    showPresetsBtn.addEventListener("click", () => {
+      presetsGrid.style.display =
+        presetsGrid.style.display === "none" ? "grid" : "none";
+    });
+  }
+
+  // Вибір пресета
+  if (presetsGrid) {
+    presetsGrid.addEventListener("click", (e) => {
+      const btn = e.target.closest(".preset-btn");
+      if (btn) {
+        // Використовуємо dataset для зручного доступу до data-атрибутів
+        document.getElementById("new-app-name").value = btn.dataset.name;
+        document.getElementById("new-app-power").value = btn.dataset.power;
+        document.getElementById("new-app-coeff").value = btn.dataset.coeff;
+
+        // Ховаємо сітку після вибору
+        presetsGrid.style.display = "none";
+      }
+    });
+  }
+
+  // Слухач для додавання приладів
+  const addAppBtn = document.getElementById("add-app-btn");
+  if (addAppBtn) {
+    addAppBtn.addEventListener("click", addAppliance);
+  }
+
+  // Слухач для видалення приладів
+  const applianceList = document.getElementById("appliance-list");
+  if (applianceList) {
+    applianceList.addEventListener("click", function (e) {
+      const removeBtn = e.target.closest(".appliance-remove");
+      if (removeBtn) {
+        deleteAppliance(removeBtn.getAttribute("data-id"));
+      }
+    });
+  }
+
+  // Перший розрахунок (всі поля вже заповнені)
+  updateCalculations();
+  calculateResults();
+});

@@ -80,7 +80,6 @@ header {
   font-size: 12px;
   color: var(--text-mid);
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
 }
@@ -258,7 +257,7 @@ header {
   background: var(--surface-d);
   border-radius: 8px;
   padding: 8px 14px;
-  margin-top: 4px;
+  margin-top: 14px;
 }
 .summary-row .label {
   font-size: 12px;
@@ -321,7 +320,7 @@ header {
   height: 20px;
   background: var(--border);
   border-radius: 4px;
-  overflow: hidden;
+  width: 100%;
 }
 .cap-fill {
   height: 100%;
@@ -378,6 +377,7 @@ header {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+  margin-top: 14px;
 }
 .stat-card {
   background: var(--surface-d);
@@ -427,13 +427,13 @@ header {
   justify-content: space-between;
   font-size: 10px;
   color: var(--text-dim);
+  margin-top: 14px;
   margin-bottom: 4px;
 }
 .load-bar-track {
   height: 8px;
   background: var(--surface-d);
   border-radius: 999px;
-  overflow: hidden;
 }
 .load-bar-fill {
   height: 100%;
@@ -442,14 +442,23 @@ header {
   width: 0%;
   transition: width 0.4s;
 }
-
+.calc-hint {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 8px 0;
+}
 .appliance-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin-bottom: 16px;
 }
-
+.appliance-list p {
+  text-align: center;
+  color: var(--text-dim);
+  padding: 20px;
+}
 .appliance-row {
   display: flex;
   align-items: center;
@@ -488,7 +497,6 @@ header {
   font-weight: 600;
   color: var(--text);
   white-space: nowrap;
-  overflow: hidden;
   text-overflow: ellipsis;
 }
 .appliance-meta {
@@ -534,6 +542,9 @@ header {
   text-transform: uppercase;
   color: var(--text-dim);
 }
+.add-form input {
+  margin-bottom: 8px;
+}
 .btn-outline {
   font-family: var(--font);
   font-size: 11px;
@@ -561,7 +572,7 @@ header {
 }
 
 .presets-grid {
-  display: grid;
+  display: none;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   margin-bottom: 10px;
@@ -640,7 +651,6 @@ footer {
 
 .middle form .row {
   padding: 6px 0;
-  overflow: hidden;
 }
 .middle form .row label {
   display: block;

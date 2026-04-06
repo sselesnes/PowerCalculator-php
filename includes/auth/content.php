@@ -7,6 +7,7 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
           <!-- Акумулятор -->
           <div class="panel">
             <div class="section-title">
+
               <h2>Акумулятор</h2>
               <div class="line"></div>
             </div>
@@ -14,38 +15,16 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
               <div class="field">
                 <label for="bat_type">Тип</label>
                 <select class="select" id="bat_type" name="bat_type">
-
-                 <option value="LiFePO4" <?php echo isset(
-                     $user_set["bat_type"]
-                 ) && $user_set["bat_type"] == "LiFePO4"
-                     ? "selected"
-                     : ""; ?>>LiFePO4</option>
-                <option value="AGM" <?php echo isset($user_set["bat_type"]) &&
-                $user_set["bat_type"] == "AGM"
-                    ? "selected"
-                    : ""; ?>>AGM</option>
-    
+                <option value="LiFePO4">LiFePO4</option>
+                <option value="AGM">AGM</option>
                 </select>
               </div>
               <div class="field">
                 <label for="bat_voltage">Напруга</label>
                 <select class="select" id="bat_voltage" name="bat_voltage">
-
-                  <option value="12" <?php echo isset(
-                      $user_set["bat_voltage"]
-                  ) && $user_set["bat_voltage"] == "12"
-                      ? "selected"
-                      : ""; ?>>12 V</option>
-                  <option value="24" <?php echo isset(
-                      $user_set["bat_voltage"]
-                  ) && $user_set["bat_voltage"] == "24"
-                      ? "selected"
-                      : ""; ?>>24 V</option>
-                  <option value="48" <?php echo isset(
-                      $user_set["bat_voltage"]
-                  ) && $user_set["bat_voltage"] == "48"
-                      ? "selected"
-                      : ""; ?>>48 V</option>
+                  <option value="12">12</option>
+                  <option value="24">24</option>
+                  <option value="48">48</option>
                   </select>
               </div>
               <div class="field">
@@ -59,9 +38,7 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
                     min="10"
                     max="2000"
                     step="5"
-                    value="<?php echo isset($user_set["bat_capacity"])
-                        ? $user_set["bat_capacity"]
-                        : "105"; ?>"
+                    value="33"
                   />
                   <span class="input-unit">Ah</span>
                 </div>
@@ -76,15 +53,13 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
                     name="bat_temp"                    
                     min="-30"
                     max="60"
-                    value="<?php echo isset($user_set["bat_temp"])
-                        ? $user_set["bat_temp"]
-                        : "25"; ?>"
+                    value="33"
                   />
                   <span class="input-unit colored-temp">°C</span>
                 </div>
               </div>
             </div>
-            <div class="summary-row" style="margin-top: 14px">
+            <div class="summary-row">
               <span class="label">Загальна ємність</span>
               <span class="value" id="total-capacity-display">2.40 кВт·год</span>
             </div>
@@ -108,9 +83,7 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
                     min="100"
                     max="20000"
                     step="100"
-                    value="<?php echo isset($user_set["inv_power"])
-                        ? $user_set["inv_power"]
-                        : "2000"; ?>"
+                    value="33"
                   />
                   <span class="input-unit">W</span>
                 </div>
@@ -126,9 +99,7 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
                     min="50"
                     max="100"
                     step="0.5"
-                    value="<?php echo isset($user_set["inv_eff"])
-                        ? $user_set["inv_eff"]
-                        : "92"; ?>"
+                    value="55"
                   />
                   <span class="input-unit">%</span>
                 </div>
@@ -144,9 +115,7 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
                     min="100"
                     max="50000"
                     step="100"
-                    value="<?php echo isset($user_set["inv_peak"])
-                        ? $user_set["inv_peak"]
-                        : "4000"; ?>"
+                    value="111"
                   />
                   <span class="input-unit">W</span>
                 </div>
@@ -169,12 +138,12 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
     <p class="capacity-title">Ефективна ємність АКБ</p>
     <div class="cap-row">
       <span class="cap-label">Номінал</span>
-      <div class="cap-track"><div id="bar-nominal" class="cap-fill nominal" style="width: 100%"></div></div>
+      <div class="cap-track"><div id="bar-nominal" class="cap-fill nominal"></div></div>
       <span class="cap-value dim" id="res-cap-nominal">0 Ah</span>
     </div>
     <div class="cap-row">
       <span class="cap-label">DoD (95%)</span>
-      <div class="cap-track"><div id="bar-dod" class="cap-fill lifepo4" style="width: 95%"></div></div>
+      <div class="cap-track"><div id="bar-dod" class="cap-fill lifepo4" ></div></div>
       <span class="cap-value" id="res-cap-dod">0 Ah</span>
     </div>
     <div class="cap-footer">
@@ -187,7 +156,7 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
     </div>
   </div>
 
-  <div class="stat-grid" style="margin-top: 14px">
+  <div class="stat-grid">
     <div class="stat-card">
       <div class="stat-card-label">Активне навантаження</div>
       <div class="stat-card-value color-amber" id="res-active-load">
@@ -213,18 +182,15 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
       </div>
     </div>
   </div>
-
-  <div style="margin-top: 14px">
-    <div class="load-bar-header">
+      <div class="load-bar-header">
       <span>Завантаженість інвертора</span>
       <span id="res-inv-percent-bar">0%</span>
     </div>
     <div class="load-bar-track">
-      <div id="inv-load-fill" class="load-bar-fill" style="width: 0%"></div>
+      <div id="inv-load-fill" class="load-bar-fill"></div>
     </div>
-  </div>
-
-  <p id="calc-hint" style="text-align: center; font-size: 12px; color: var(--text-dim); padding: 8px 0;">
+  
+  <p class="calc-hint" id="calc-hint">
     Додайте прилади для розрахунку
   </p>
 </div>
@@ -235,87 +201,74 @@ require_once ROOT_PATH . "/engine/mysql_tables.php"; ?>
     <div class="section-title">
       <h2>Прилади</h2>
       <div class="line"></div>
-      <button class="btn btn-ghost" onclick="location.reload()">↺ Оновити</button>
+      <button class="btn btn-ghost" onclick="location.reload()">Оновити</button>
       <button class="btn btn-primary" onclick="printReport()">Друкувати звіт</button>    
     </div>
 
-    <div class="appliance-list" id="appliance-list">
-      <?php if (empty($appliances)): ?>
-        <p style="text-align: center; color: var(--text-dim); padding: 20px;">Список приладів порожній</p>
-      <?php else: ?>
-        <?php foreach ($appliances as $app): ?>
-          <div class="appliance-row" id="app-row-<?= $app["id"] ?>">
-            <button class="appliance-toggle">●</button>
-            <div class="appliance-info">
-              <div class="appliance-name"><?= htmlspecialchars(
-                  $app["name"]
-              ) ?></div>
-              <div class="appliance-meta">
-                <?= $app["rated_power"] ?> W · 
-                пік <?= $app["peak_power"] ?> W · 
-                ×<?= number_format(
-                    $app["peak_power"] / ($app["rated_power"] ?: 1),
-                    1
-                ) ?>
-              </div>
-            </div>
-          <button class="appliance-remove" onclick="deleteAppliance(<?php echo $app[
-              "id"
-          ]; ?>)">✕</button>
+<div class="appliance-list" id="appliance-list">
+  <?php if (empty($appliances)): ?>
+    <p>Список приладів порожній</p>
+  <?php else: ?>
+    <?php foreach ($appliances as $app): ?>
+      <div class="appliance-row" id="app-row-<?= $app["id"] ?>">
+        <button class="appliance-toggle">●</button>
+        <div class="appliance-info">
+          <div class="appliance-name"><?= htmlspecialchars(
+              $app["name"]
+          ) ?></div>
+          <div class="appliance-meta">
+            <?= $app["rated_power"] ?> W · пік <?= $app["peak_power"] ?> W · 
+            ×<?= number_format(
+                $app["peak_power"] / ($app["rated_power"] ?: 1),
+                1
+            ) ?>
           </div>
-        <?php endforeach; ?>
-      <?php endif; ?>
-    </div>
+        </div>
+        <button class="appliance-remove" data-id="<?= $app["id"] ?>">✕</button>
+      </div>
+    <?php endforeach; ?>
+  <?php endif; ?>
+</div>
 
     <div class="add-form">
-      <div class="add-form-header">
-        <span class="add-form-title">+ Додати прилад</span>
-        <button class="btn-outline" onclick="document.getElementById('presets-grid').style.display = 'grid'">Типові пристрої</button>
-      </div>
+  <div class="add-form-header">
+    <span class="add-form-title">+ Додати прилад</span>
+    <button class="btn-outline" id="show-presets">Типові пристрої</button>
+  </div>
 
-      <div class="presets-grid" id="presets-grid" style="display: none">
-        <button class="preset-btn" onclick="setPreset('Холодильник', 150, 5)">
-            <span>Холодильник (150W, x5)</span>
-        </button>
-        <button class="preset-btn" onclick="setPreset('Роутер', 15, 1)">
-            <span>Роутер (15W, x1)</span>
-        </button>
-      </div>
-
-      <div style="margin-bottom: 8px">
-        <input class="input" type="text" id="new-app-name" placeholder="Назва (напр. Телевізор)" />
-      </div>
-
-      <div class="add-form-row">
-        <div class="input-wrap">
-          <input class="input" type="number" id="new-app-power" value="100" min="1" />
-          <span class="input-unit">W</span>
-        </div>
-        <div class="input-wrap">
-          <input class="input" type="number" id="new-app-coeff" value="1" min="1" max="10" step="0.5" />
-          <span class="input-unit">×</span>
-        </div>
-        <button class="btn btn-primary" onclick="addAppliance()">Додати</button>
-      </div>
-    </div>
+  <div class="presets-grid" id="presets-grid" style="display: none">
+    <button class="preset-btn" data-name="Холодильник" data-power="150" data-coeff="5">
+        <span>Холодильник (150W, x5)</span>
+    </button>
+    <button class="preset-btn" data-name="Роутер" data-power="15" data-coeff="1">
+        <span>Роутер (15W, x1)</span>
+    </button>
+    <button class="preset-btn" data-name="Ноутбук" data-power="65" data-coeff="1">
+        <span>Ноутбук (65W, x1)</span>
+    </button>
+    <button class="preset-btn" data-name="Лампа" data-power="10" data-coeff="1">
+        <span>Лампа (10W, x1)</span>
+    </button>
+  </div>
   
+    <input class="input" type="text" id="new-app-name" placeholder="Назва (напр. Телевізор)" />
+
+  <div class="add-form-row">
+    <div class="input-wrap">
+      <input class="input" type="number" id="new-app-power" value="100" min="1" />
+      <span class="input-unit">W</span>
+    </div>
+    <div class="input-wrap">
+      <input class="input" type="number" id="new-app-coeff" value="1" min="1" max="10" step="0.5" />
+      <span class="input-unit">×</span>
+    </div>
+    <button class="btn btn-primary" id="add-app-btn">Додати</button>
+  </div>
+</div>
 </div>
 </div>
 
-<script src="/engine/app.js"></script>
 <script>
-document.addEventListener("DOMContentLoaded", calculateResults);
-document.addEventListener("DOMContentLoaded", updateCalculations);
-
-// EventListener 'change' на всі інпути та селекти в панелях налаштувань
-document
-  .querySelectorAll(".panel .select, .panel .input")
-  .forEach((element) => {
-    element.addEventListener("change", function () {      
-      if (this.name) {
-        saveToDb(this.name, this.value);
-        updateCalculations();
-      }
-    });
-  });
+window.userSettings = <?= json_encode($user_set) ?>;
 </script>
+<script src="/engine/app.js"></script>
