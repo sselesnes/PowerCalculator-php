@@ -84,17 +84,17 @@ function addAppliance() {
 }
 
 function calculateResults() {
-  // 1. Дані АКБ
+  // Дані АКБ
   const cap = parseFloat(document.getElementById("bat_capacity").value) || 0;
   const volt = parseFloat(document.getElementById("bat_voltage").value) || 0;
   const dod = 0.95; // 95% для LiFePO4
 
-  // 2. Дані Інвертора
+  // Дані Інвертора
   const invPower = parseInt(document.getElementById("inv_power").value) || 0;
   const invEff =
     (parseFloat(document.getElementById("inv_eff").value) || 92) / 100;
 
-  // 3. Збір приладів (парсимо Вати з тексту в списку)
+  // Збір приладів (парсимо Вати з тексту в списку)
   let totalActive = 0;
   let totalPeak = 0;
   const rows = document.querySelectorAll(".appliance-row");
@@ -109,7 +109,6 @@ function calculateResults() {
   });
 
   // --- РОЗРАХУНКИ ---
-
   // Ефективна ємність
   const effAh = cap * dod;
   const effKwh = (effAh * volt) / 1000;
@@ -131,7 +130,6 @@ function calculateResults() {
     invPower > 0 ? Math.round((totalActive / invPower) * 100) : 0;
 
   // --- ВИВІД В HTML ---
-
   // Секція АКБ
   document.getElementById("res-cap-nominal").innerText = cap + " Ah";
   document.getElementById("res-cap-dod").innerText = effAh.toFixed(1) + " Ah";

@@ -115,7 +115,7 @@ header {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  text-decoration: none !important;
+  text-decoration: none !important;  
 }
 .btn-ghost {
   background: transparent;
@@ -130,7 +130,7 @@ header {
 .btn-primary {
   background: var(--amber);
   border: 1px solid transparent;
-  color: #1c1917;
+  color: #1c1917;  
 }
 .btn-primary:hover {
   background: var(--amber-l);
@@ -524,10 +524,13 @@ header {
 }
 
 .add-form {
+  display: flex;
+  flex-direction: column;
   background: var(--surface-d);
   border: 1px dashed var(--border-l);
   border-radius: 12px;
   padding: 16px;
+  row-gap: 8px;
 }
 .add-form-header {
   display: flex;
@@ -542,9 +545,7 @@ header {
   text-transform: uppercase;
   color: var(--text-dim);
 }
-.add-form input {
-  margin-bottom: 8px;
-}
+
 .btn-outline {
   font-family: var(--font);
   font-size: 11px;
@@ -591,7 +592,7 @@ header {
   transition:
     border-color 0.15s,
     background 0.15s;
-  font-family: var(--font);
+  font-family: var(--font);  
 }
 @media (prefers-color-scheme: dark) {
   .preset-btn {
